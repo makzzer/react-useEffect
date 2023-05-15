@@ -4,11 +4,12 @@ export const useFetch = (url) => {
   //acá estoy creando un estado que va a representar los datos que me traigo de la API
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   console.log("dentro del useFetchhhhhhhhhhhhh2");
 
   const fetchDataGenerica = useCallback(async () => {
+    setLoading(true)
     try {
       const res = await fetch(url);
       if (!res.ok) throw Error("error consumiendo los datos de la API");
@@ -21,6 +22,7 @@ export const useFetch = (url) => {
       //le mando un set data con array vacio para que no explote el sitio web
       setData([])
     } finally {
+        //acá cierro la petición cuando termina el fetch
       setLoading(false);
     }
   }, []);
@@ -32,5 +34,5 @@ export const useFetch = (url) => {
   }, []);
 
   //tengo que retornar un objeto, despues desestructuro y lo obtengo
-  return { data };
+  return { data,loading};
 };

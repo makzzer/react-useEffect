@@ -25,7 +25,7 @@ const App = () => {
   */
 
   //uso desestructuracion sobre el objeto que me trae el fetch para obtener su propiedad data 
-  const {data} = useFetch("https://jsonplaceholder.typicode.com/userss")
+  const {data,loading} = useFetch("https://jsonplaceholder.typicode.com/userss")
 
 
   //para que no se ejecute todo el tiempo la funcion si la quiero sacar afuera del useEffect
@@ -33,7 +33,7 @@ const App = () => {
   //nueva solucion: para que no crée la funcion a cada rato voy a crear un CUSTOM HOOK con el fetch, y lo puedo reutilizar con cualquier URL de API
 
 
-  if (!data) return <div>Cargando...</div>
+  if (loading) return <div>Cargando...</div>
 
   return (
     <>
