@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 
 
@@ -23,41 +23,46 @@ const App = () => {
   }, [contador])
   */
 
-  //El useEffect por defecto o no retorna nada o retorna una funcion
-  //Por eso si uso async y await tengo que devolver el metodo
-  useEffect(() => {
+  //para que no se ejecute todo el tiempo la funcion si la quiero sacar afuera del useEffect
+  //tengo que usar el useCallback, otro hook de react que me permite que una funcion no se crée mas de una vez asi no afecto a la performance
 
-    async function fetchDatosUsuarios() {
-      const resp = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      const datosUs = await resp.json()
-      setDatosUsuarios(datosUs)
-    }
-    fetchDatosUsuarios()
-
-
-  })
+  const fetchDatosUsuarios = useCallback(async () => {
+    const resp = await fetch("https://jsonplaceholder.typicode.com/users");
+    const datosUs = await resp.json()
+    setDatosUsuarios(datosUs)
+  },[])
 
 
 
 
-  if (!datosUsuarios) return <div>Cargando...</div>
 
-  return (
-    <>
-      <h1>Hola Use Effect</h1>
-      <button onClick={aumentarCont}>elbotoncito: {contador}</button>
 
-      <ul>
-        {datosUsuarios.map(data => (
-          <li key={data.id}> {data.name} </li>
-        ))
-        }
-      </ul>
+//El useEffect por defecto o no retorna nada o retorna una funcion
+//Por eso si uso async y await tengo que devolver el metodo
+useEffect(() => {
+  fetchDatosUsuarios();
 
-    </>
-  )
+},[contador])
+
+
+
+
+if (!datosUsuarios) return <div>Cargando...</div>
+
+return (
+  <>
+    <h1>Hola Use Effect</h1>
+    <button onClick={aumentarCont}>elbotoncito: {contador}</button>
+
+    <ul>
+      {datosUsuarios.map(data => (
+        <li key={data.id}> {data.name} </li>
+      ))
+      }
+    </ul>
+
+  </>
+)
 }
 
 export default App;
