@@ -9,7 +9,7 @@ export const useFetch = (url) => {
   console.log("dentro del useFetchhhhhhhhhhhhh2");
 
   const fetchDataGenerica = useCallback(async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const res = await fetch(url);
       if (!res.ok) throw Error("error consumiendo los datos de la API");
@@ -18,11 +18,11 @@ export const useFetch = (url) => {
       //le asigno al useState de dataGenerica el estado inicial que es la DATA que traigo de la API
       setData(dataRecibida);
     } catch (error) {
-      console.log(error.message);
       //le mando un set data con array vacio para que no explote el sitio web
-      setData([])
+      setError(error.message);
+      setData([]);
     } finally {
-        //acá cierro la petición cuando termina el fetch
+      //acá cierro la petición cuando termina el fetch
       setLoading(false);
     }
   }, []);
@@ -34,5 +34,5 @@ export const useFetch = (url) => {
   }, []);
 
   //tengo que retornar un objeto, despues desestructuro y lo obtengo
-  return { data,loading};
+  return { data, loading, error };
 };
